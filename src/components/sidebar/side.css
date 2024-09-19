@@ -1,0 +1,27 @@
+/* Header.css */
+nav {
+    padding: 1rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    color: #6b7280; /* Hover holati uchun rang */
+  }
+  
+  img {
+    width: 48px; /* Logotip balandligi */
+    height: 48px; /* Logotip kengligi */
+    object-fit: contain;
+    border-radius: 50%;
+  }
+  
