@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons'; 
 import { addLike, removeLike } from '../../redux/slices/likeSlice';
 import { useGetLikedProductsMutation, useUnLikeProductMutation } from "../../redux/api/likedApi";
+import { toast, ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 const { Meta } = Card;
 
@@ -21,14 +23,18 @@ const Products = () => {
         if (likedProducts.includes(productId)) {
             await unLikeProduct(productId);
             dispatch(removeLike(productId));
+            toast.info("Product unliked!");  
         } else {
             await getLikedProducts(productId);
-            dispatch(addLike(productId)); 
+            dispatch(addLike(productId));
+            toast.success("Product liked!"); 
         }
     };
 
     return (
         <div>
+            <ToastContainer /> 
+
             <div className='relative bg-gray-800 text-white h-screen mb-16 mt-[0px]'>
                 <div className='absolute inset-0'>
                     <img 
@@ -49,7 +55,7 @@ const Products = () => {
                         Shop Now
                     </Button>
                 </div>
-                <marquee className='bg-gray-900 text-white h-[100px] flex items-center  p-4' direction="left" scrollamount="10">
+                <marquee className='bg-gray-900 text-white h-[100px] flex items-center p-4' direction="left" scrollamount="10">
                     <div className='flex items-center space-x-8 gap-[100px]'>
                         {data && data.payload.slice(0, 5).map((product, index) => (
                             <div key={index} className='flex items-center space-x-4'>
