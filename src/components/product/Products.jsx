@@ -1,23 +1,28 @@
 import { useGetProductsQuery } from '../../redux/api/productsApi';
-import { Button, Card } from 'antd';
+import { Button, Card, Spin } from 'antd';
 import { Container } from '../../utils';
 import { Link } from 'react-router-dom';
 import { Carousel, Rate } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons'; 
 import { addLike, removeLike } from '../../redux/slices/likeSlice';
+import { useGetLikedProductsMutation, useUnLikeProductMutation } from "../../redux/api/likedApi";
 
 const { Meta } = Card;
 
 const Products = () => {
-    const { data } = useGetProductsQuery();
+    const { data, isLoading } = useGetProductsQuery();
     const dispatch = useDispatch();
-    const likedProducts = useSelector((state) => state.like.likes);
+    const likedProducts = useSelector((state) => state.like.likes); 
+    const [getLikedProducts] = useGetLikedProductsMutation(); 
+    const [unLikeProduct] = useUnLikeProductMutation(); 
 
-    const handleLike = (productId) => {
+    const handleLikeToggle = async (productId) => {
         if (likedProducts.includes(productId)) {
-            dispatch(removeLike(productId)); 
+            await unLikeProduct(productId);
+            dispatch(removeLike(productId));
         } else {
+            await getLikedProducts(productId);
             dispatch(addLike(productId)); 
         }
     };
@@ -27,7 +32,7 @@ const Products = () => {
             <div className='relative bg-gray-800 text-white h-screen mb-16 mt-[0px]'>
                 <div className='absolute inset-0'>
                     <img 
-                        src={data && data.payload[0].product_images[3]} 
+                        src={data && data.payload[0]?.product_images[3]} 
                         alt="Banner" 
                         className='w-full h-full object-cover opacity-60'
                     />
@@ -44,7 +49,7 @@ const Products = () => {
                         Shop Now
                     </Button>
                 </div>
-                <marquee className='bg-gray-900 text-white h-[100px] flex items-center  p-4'  direction="left" scrollamount="10">
+                <marquee className='bg-gray-900 text-white h-[100px] flex items-center  p-4' direction="left" scrollamount="10">
                     <div className='flex items-center space-x-8 gap-[100px]'>
                         {data && data.payload.slice(0, 5).map((product, index) => (
                             <div key={index} className='flex items-center space-x-4'>
@@ -65,70 +70,71 @@ const Products = () => {
                         <span>🎉 New Arrivals Just In! Check Them Out! 🎉</span>
                     </div>
                 </marquee>
-
-
             </div>
 
             <Container>
                 <h2 className='text-3xl font-bold text-center mb-8 mt-[150px]'>Our Products</h2>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-                    {
-                        data && data.payload &&
-                        data.payload.map(product => 
-                            <Card
-                                key={product._id}
-                                hoverable
-                                className='relative transition-transform duration-300 hover:scale-105 bg-gray-900'
-                                cover={
-                                    <>
-                                        <Carousel autoplay arrows>
-                                            {product.product_images.map((image, index) => (
-                                                <div key={index} className='flex justify-center'>
-                                                    <img src={image} alt={product.product_name} className='object-cover w-full h-80 rounded-lg' />
-                                                </div>
-                                            ))}
-                                        </Carousel>
-                                        <div className='absolute top-2 right-2 z-10 text-white text-2xl cursor-pointer '> 
-                                            <Button
-                                                className='text-white ml-[250px]'
-                                                type="text" 
-                                                icon={likedProducts.includes(product._id) ? <HeartFilled className='text-red-500' /> : <HeartOutlined className='text-white ' />} 
-                                                onClick={() => handleLike(product._id)} 
-                                            />
-                                        </div>
-                                    </>
-                                }
-                            >
-                                <Meta
-                                    title={
-                                        <span className='text-white'>{product.product_name}</span>
-                                    }
-                                    description={
-                                        <div>
-                                            <span className='text-lg text-white'>${product.sale_price}</span>
-                                            <div className='text-sm text-gray-100'>
-                                                <p className='mb-2'>{product.description}</p>
-                                                <div className='flex items-center'>
-                                                    <Rate className='border-1 border-white' disabled defaultValue={2} />
-                                                    <span className='ml-2'>{product.reviews_count} reviews</span>
-                                                </div>
-                                                <div>
-                                                    <span> { }</span>
-                                                </div>
-                                                {product.discount && 
-                                                    <div className='mt-2 text-red-500'>
-                                                        <strong>Discount: {product.discount}% OFF</strong>
+                {isLoading ? ( 
+                    <div className='flex justify-center items-center h-96'>
+                        <Spin size='large' />
+                    </div>
+                ) : (
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+                        {
+                            data && data.payload &&
+                            data.payload.map(product => 
+                                <Card
+                                    key={product._id}
+                                    hoverable
+                                    className='relative transition-transform duration-300 hover:scale-105 bg-gray-900'
+                                    cover={
+                                        <>
+                                            <Carousel autoplay arrows>
+                                                {product.product_images.map((image, index) => (
+                                                    <div key={index} className='flex justify-center'>
+                                                        <img src={image} alt={product.product_name} className='object-cover w-full h-80 rounded-lg' />
                                                     </div>
-                                                }
+                                                ))}
+                                            </Carousel>
+                                            <div className='absolute top-2 right-2 z-10 text-white text-2xl cursor-pointer'> 
+                                                <Button
+                                                    className='text-white ml-[250px]'
+                                                    type="text" 
+                                                    icon={likedProducts.includes(product._id) ? <HeartFilled className='text-red-500' /> : <HeartOutlined className='text-white ' />} 
+                                                    onClick={() => handleLikeToggle(product._id)} 
+                                                />
                                             </div>
-                                        </div>
-                                    } 
-                                />
-                                <Link to={`/products/${product._id}`}><Button className='w-full mt-4' type='primary'>View Details</Button></Link>
-                            </Card>
-                        )
-                    }
-                </div>
+                                        </>
+                                    }
+                                >
+                                    <Meta
+                                        title={
+                                            <span className='text-white'>{product.product_name}</span>
+                                        }
+                                        description={
+                                            <div>
+                                                <span className='text-lg text-white'>${product.sale_price}</span>
+                                                <div className='text-sm text-gray-100'>
+                                                    <p className='mb-2'>{product.description}</p>
+                                                    <div className='flex items-center'>
+                                                        <Rate className='border-1 border-white' disabled defaultValue={2} />
+                                                        <span className='ml-2'>{product.reviews_count} reviews</span>
+                                                    </div>
+                                                    {product.discount && 
+                                                        <div className='mt-2 text-red-500'>
+                                                            <strong>Discount: {product.discount}% OFF</strong>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        } 
+                                    />
+                                    <Link to={`/products/${product._id}`}><Button className='w-full mt-4' type='primary'>View Details</Button></Link>
+                                </Card>
+                            )
+                        }
+                    </div>
+                )}
             </Container>
 
             <div className='bg-gray-800 text-white py-6 text-center mt-16'>

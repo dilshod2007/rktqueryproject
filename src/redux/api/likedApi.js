@@ -4,12 +4,17 @@ const likedApi = api.injectEndpoints({
   endpoints: (build) => ({
     getLikedProducts: build.mutation({
       query: (id) => ({
-        url: `/product/66e83f10a469f0e41ad9ab92/like`,
+        url: `/product/${id}/like`,
         method: "PATCH",
-        body : id
+      }),
+    }),
+    unLikeProduct: build.mutation({
+      query: (id) => ({
+        url: `/product/${id}/unlike`,
+        method: "PATCH",
       }),
     }),
   }),
 });
 
-export const { useGetLikedProductsMutation } = likedApi;
+export const { useGetLikedProductsMutation, useUnLikeProductMutation } = likedApi;

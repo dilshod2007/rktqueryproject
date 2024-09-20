@@ -12,7 +12,8 @@ const { Meta } = Card;
 
 const Like = () => {
     const dispatch = useDispatch();
-    const [getLikedProducts] = useGetLikedProductsMutation();
+    
+
 
     const likedProducts = useSelector((state) => state.like.likes);
     const { data: productsData } = useGetProductsQuery();

@@ -1,19 +1,31 @@
-import { Suspense } from "react"
+import { Suspense, useState, useEffect } from "react";
+import { Spin } from 'antd';
 
-const SuspenseComponent = ({children}) => {
+const SuspenseComponent = ({ children }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000); 
+    return () => clearTimeout(timer); 
+  }, []);
+
+  if (loading) {
+    return     <Spin size="large"  className="flex justify-center items-center h-screen w-screen "/>;
+  }
+
   return (
-    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-        {children}
+    <Suspense fallback={null}>
+      {children}
     </Suspense>
-  )
+  );
 }
 
-const Container = ({children}) => {
+const Container = ({ children }) => {
   return (
     <div className="container max-w-[1200px] mx-auto">
-        {children}
+      {children}
     </div>
-  )
+  );
 }
 
-export {SuspenseComponent, Container}
+export { SuspenseComponent, Container };
