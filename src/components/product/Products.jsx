@@ -9,6 +9,7 @@ import { addLike, removeLike } from '../../redux/slices/likeSlice';
 import { useGetLikedProductsMutation, useUnLikeProductMutation } from "../../redux/api/likedApi";
 import { toast, ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import iphone from "../../imgs/iphone.mp4"
 
 const { Meta } = Card;
 
@@ -35,13 +36,9 @@ const Products = () => {
         <div>
             <ToastContainer /> 
 
-            <div className='relative bg-gray-800 text-white h-screen mb-16 mt-[0px]'>
-                <div className='absolute inset-0'>
-                    <img 
-                        src={data && data.payload[0]?.product_images[3]} 
-                        alt="Banner" 
-                        className='w-full h-full object-cover opacity-60'
-                    />
+            <div className='relative  bg-gray-800 text-white h-screen mb-16 '>
+                <div className='absolute inset-0 overflow-hidden  '>
+                    <video src={iphone} autoPlay muted loop className='w-full h-full object-cover'></video>
                     <div className='absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-90'></div>
                 </div>
                 <div className='relative flex flex-col items-center justify-center h-full text-center px-6'>

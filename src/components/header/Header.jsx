@@ -7,6 +7,7 @@ import { useSearchProductMutation } from "../../redux/api/productsApi";
 import { AutoComplete } from "antd";
 import { GiHamburgerMenu } from "react-icons/gi";
 import DU from "../../imgs/DU.png";
+import "../header/header.css";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -35,9 +36,9 @@ const Header = () => {
   if (pathname.includes("/dashboard")) return null;
 
   return (
-    <div className="relative">
+    <div className="navbarcontainer">
       <div
-        className={`fixed top-0 left-0 h-full bg-gray-900 text-white transition-transform transform ${
+        className={` top-0 left-0  transition-transform transform ${
           sidebarVisible ? "translate-x-0" : "-translate-x-full"
         } z-40 w-72`}
         style={{ transition: "transform 0.3s ease", height: "100vh" }}
@@ -55,7 +56,7 @@ const Header = () => {
               onClick={toggleSidebar}
               className="hover:text-gray-400 text-lg font-medium"
             >
-              Home
+              Home 
             </Link>
           </li>
           {!token ? (
@@ -101,7 +102,7 @@ const Header = () => {
         ></div>
       )}
 
-      <nav className="fixed top-0 left-0 w-full flex items-center justify-between p-4 bg-white shadow-md border-b border-gray-300 z-20">
+      <nav className="    w-full flex items-center justify-between p-4      navbar">
         <button
           onClick={toggleSidebar}
           className={`text-gray-800 text-2xl hover:text-gray-600 ${
@@ -112,8 +113,12 @@ const Header = () => {
         </button>
 
         <Link to={"/"} className="flex items-center">
-          <div className="flex items-center justify-center bg-white rounded-full ml-[201px]">
-            <img src={DU} alt="Logo" className="w-28 h-auto object-contain" />
+          <div className="flex items-center justify-center  rounded-full ml-[201px]">
+          <div className=" DU ">
+            <span className="text-5xl font-bold ml-[20px]">D</span>
+            <span className="text-5xl font-bold ml-[-10px]">U</span>
+            <span className="text-5xl  font-bold ml-[-10px]">F</span>
+          </div>
           </div>
         </Link>
 
