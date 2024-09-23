@@ -20,6 +20,8 @@ const Like = () => {
 
     const likedItems = productsData?.payload.filter((product) => likedProducts.includes(product._id));
 
+    const [getLikedProducts] = useGetLikedProductsMutation();
+
     const handleLikeToggle = (productId, liked) => {
         dispatch(removeLike(productId));
         getLikedProducts({ id: productId, liked });

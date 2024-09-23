@@ -7,12 +7,8 @@ const profileApi = api.injectEndpoints({
         url: "/auth/profile"
       }),
     }),
-     getUsers: build.query({
-      query: () => ({
-        url: "/admin/registered-users",
-      })
-     })
+   
   }),
 });
 
-export const { useGetProfileQuery , useGetUsersQuery} = profileApi;
+export const { useGetProfileQuery } = profileApi;

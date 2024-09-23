@@ -1,6 +1,6 @@
 import { Card, Avatar } from "antd";
 import { Link } from "react-router-dom";
-import { useGetProfileQuery } from "../../../redux/api/userApi";
+import { useGetProfileQuery } from "../../../redux/api/profileApi";
 import { FaBriefcase, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
 import "../profile/profile.css";
 

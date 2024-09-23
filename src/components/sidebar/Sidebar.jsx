@@ -6,7 +6,7 @@ import { GiHamburgerMenu, GiCardboardBox, GiPerson } from 'react-icons/gi';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate(); // Sahifani o'zgartirish uchun useNavigate hook'idan foydalanamiz.
+  const navigate = useNavigate(); 
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -83,8 +83,8 @@ const Sidebar = () => {
             </Link>
           </li>
         </ul>
-{/* 
-        <button
+
+        {/* <button
           className="flex items-center space-x-2 hover:text-gray-300 text-xl text-white mt-auto pb-4"
           onClick={handleLogout} 
         >
