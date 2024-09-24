@@ -14,6 +14,8 @@ const Search = lazy(() => import('../routes/search/Search'));
 const Users = lazy(() => import('../routes/dashboard/users/Users'));
 const Dashboard = lazy(() => import('../routes/dashboard/Dashboard'));
 const Like = lazy(() => import('../components/liked/Liked'));
+const Products = lazy(() => import('../routes/dashboard/products/Products'));
+const Create = lazy(() => import('../routes/dashboard/create/Create'));
 
 const RouteController = () => {
     return useRoutes([
@@ -40,6 +42,14 @@ const RouteController = () => {
                         {
                             path: "/dashboard/users",
                             element: <Suspense><Users /></Suspense>
+                        },
+                        {
+                            path: "/dashboard/products",
+                            element: <Suspense><Products /></Suspense>
+                        },
+                        {
+                            path: "/dashboard/create",
+                            element: <Suspense><Create /></Suspense>
                         }
                     ]
 

@@ -4,12 +4,13 @@ import { Container } from '../../utils';
 import { Link } from 'react-router-dom';
 import { Carousel, Rate } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons'; 
+import { HeartOutlined, HeartFilled, SoundOutlined, SoundFilled } from '@ant-design/icons'; 
 import { addLike, removeLike } from '../../redux/slices/likeSlice';
 import { useGetLikedProductsMutation, useUnLikeProductMutation } from "../../redux/api/likedApi";
 import { toast, ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
-import iphone from "../../imgs/iphone.mp4"
+import iphone from "../../imgs/16.mp4";
+import { useState, useRef } from 'react';
 
 const { Meta } = Card;
 
@@ -19,6 +20,11 @@ const Products = () => {
     const likedProducts = useSelector((state) => state.like.likes); 
     const [getLikedProducts] = useGetLikedProductsMutation(); 
     const [unLikeProduct] = useUnLikeProductMutation(); 
+
+    const [isMuted, setIsMuted] = useState(true); 
+    const videoRef = useRef(null);
+
+    const [loadingProductId, setLoadingProductId] = useState(null);  
 
     const handleLikeToggle = async (productId) => {
         if (likedProducts.includes(productId)) {
@@ -32,16 +38,38 @@ const Products = () => {
         }
     };
 
+    const handleSoundToggle = () => {
+        const video = videoRef.current;
+        if (video) {
+            video.muted = !video.muted;
+            setIsMuted(video.muted);
+        }
+    };
+
+    const handleViewDetailsClick = (productId) => {
+        setLoadingProductId(productId);
+        setTimeout(() => {
+            setLoadingProductId(null);
+            window.location.href = `/products/${productId}`;
+        }, 2000);  
+    };
+
     return (
         <div>
             <ToastContainer /> 
 
-            <div className='relative  bg-gray-800 text-white h-screen mb-16 '>
-                <div className='absolute inset-0 overflow-hidden  '>
-                    <video src={iphone} autoPlay muted loop className='w-full h-full object-cover opacity-1.5'></video>
+            <div className='relative bg-gray-800 text-white h-screen mb-16'>
+                <div className='absolute inset-0 overflow-hidden'>
+                    <video 
+                        src={iphone}  
+                        autoPlay 
+                        muted={isMuted} 
+                        ref={videoRef}  
+                        className='w-full h-full object-cover opacity-1.5'
+                    ></video>
                     <div className='absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-90'></div>
                 </div>
-                <div className='relative flex flex-col items-center justify-center h-full text-center px-6 '>
+                <div className='relative flex flex-col items-center justify-center h-full text-center px-6'>
                     <h1 className='text-8xl font-extrabold mb-8 leading-tight'>
                         iPhone 16 Pro
                     </h1>
@@ -49,6 +77,12 @@ const Products = () => {
                         Experience the future of smartphones. Designed with perfection.
                     </p>
                    
+                    <div 
+                        className='absolute bottom-10 right-10 p-3 bg-gray-700 rounded-full cursor-pointer hover:bg-gray-600 transition'
+                        onClick={handleSoundToggle}
+                    >
+                        {isMuted ? <SoundOutlined className='text-white text-2xl' /> : <SoundFilled className='text-white text-2xl' />}
+                    </div>
                 </div>
                 <marquee className='bg-gray-900 text-white h-[100px] flex items-center p-4' direction="left" scrollamount="10">
                     <div className='flex items-center space-x-8 gap-[100px]'>
@@ -80,7 +114,7 @@ const Products = () => {
                         <Spin size='large' />
                     </div>
                 ) : (
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 w-[1350px] mx-auto ml-[-80px] h-[1200px]'>
                         {
                             data && data.payload &&
                             data.payload.map(product => 
@@ -93,13 +127,13 @@ const Products = () => {
                                             <Carousel autoplay arrows>
                                                 {product.product_images.map((image, index) => (
                                                     <div key={index} className='flex justify-center'>
-                                                        <img src={image} alt={product.product_name} className='object-cover w-full h-80 rounded-lg' />
+                                                        <img src={image} alt={product.product_name} className='object-cover w-full h-[430px] rounded-lg' />
                                                     </div>
                                                 ))}
                                             </Carousel>
                                             <div className='absolute top-2 right-2 z-10 text-white text-2xl cursor-pointer'> 
                                                 <Button
-                                                    className='text-white ml-[250px]'
+                                                    className='text-white ml-[400px] bg-red-500 rounded'
                                                     type="text" 
                                                     icon={likedProducts.includes(product._id) ? <HeartFilled className='text-red-500' /> : <HeartOutlined className='text-white ' />} 
                                                     onClick={() => handleLikeToggle(product._id)} 
@@ -110,7 +144,7 @@ const Products = () => {
                                 >
                                     <Meta
                                         title={
-                                            <span className='text-white'>{product.product_name}</span>
+                                            <span className='text-white text-3xl'>{product.product_name}</span>
                                         }
                                         description={
                                             <div>
@@ -130,7 +164,14 @@ const Products = () => {
                                             </div>
                                         } 
                                     />
-                                    <Link to={`/products/${product._id}`}><Button className='w-full mt-4' type='primary'>View Details</Button></Link>
+                                    <Button
+                                        className='w-full mt-4'
+                                        type='primary'
+                                        loading={loadingProductId === product._id} 
+                                        onClick={() => handleViewDetailsClick(product._id)}
+                                    >
+                                        {loadingProductId === product._id ? 'Loading...' : 'View Details'}
+                                    </Button>
                                 </Card>
                             )
                         }
@@ -138,7 +179,7 @@ const Products = () => {
                 )}
             </Container>
 
-            <div className='bg-gray-800 text-white py-6 text-center mt-16'>
+            <div className='bg-gray-800 text-white py-6 text-center mt-[200px]'>
                 <p>&copy; 2024 Your Company. All rights reserved.</p>
                 <p>
                     <Link to='/contact' className='text-blue-400 hover:underline'>Contact Us</Link> | 

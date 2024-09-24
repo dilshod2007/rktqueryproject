@@ -1,12 +1,14 @@
-import { MdLogout } from "react-icons/md"; 
-import { FaHome } from "react-icons/fa"; 
+import { MdCreateNewFolder } from "react-icons/md";
+import { MdProductionQuantityLimits } from "react-icons/md";
+import { MdLogout } from "react-icons/md";
+import { FaHome } from "react-icons/fa";
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { GiHamburgerMenu, GiCardboardBox, GiPerson } from 'react-icons/gi';
+import { GiCardboardBox, GiPerson } from 'react-icons/gi';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -25,16 +27,13 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    
     navigate('/auth/login');
   };
 
   return (
     <div>
       <nav
-        className={`fixed top-0 left-0 z-50 w-full h-16 bg-gray-900 transition-transform duration-300 ${
-          isOpen ? 'translate-x-64' : 'translate-x-0'
-        } flex items-center justify-between px-4`}
+        className="fixed top-0 left-0 z-50 w-full h-16 bg-gray-900 flex items-center justify-between px-4"
       >
         <button
           className="text-white text-2xl"
@@ -51,46 +50,71 @@ const Sidebar = () => {
             </svg>
           )}
         </button>
-      <Link to='/'>
-      <button className="flex items-center space-x-2 hover:text-gray-300 text-xl text-white gap-2 border-2 px-2 py-1 rounded-lg">
-          Home <FaHome className="text-2xl text-white" />
-        </button>
-      </Link>
+        <Link to='/'>
+          <button className="flex items-center space-x-2 hover:text-gray-300 text-xl text-white gap-2 border-2 px-2 py-1 rounded-lg">
+            Home <FaHome className="text-2xl text-white" />
+          </button>
+        </Link>
       </nav>
 
       <div
-        className={`fixed top-0 left-0 h-full bg-gray-900 from-green-400 via-blue-500 to-purple-600 p-6 shadow-lg text-white text-lg w-64 transform sidebar ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 ease-in-out z-40 flex flex-col`}
+        className={`fixed top-0 left-0 h-full bg-gray-900 from-green-400 via-blue-500 to-purple-600 p-6 shadow-lg text-white text-lg transition-all duration-500 ease-in-out z-40 flex flex-col ${isOpen ? 'w-64' : 'w-16'
+          } sidebar`}
       >
-        <button
-          className="absolute top-4 right-4 text-white text-2xl"
-          onClick={toggleSidebar}
-          aria-label="Close Sidebar"
-        ></button>
-
         <ul className="mt-16 space-y-4">
           <li>
             <Link to="/dashboard/profile" onClick={toggleSidebar} className="flex items-center space-x-2 hover:text-gray-300 text-xl">
               <GiPerson className="text-2xl" />
-              <span>Profile</span>
+              <span
+                className={`transition-all duration-500 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0 hidden'}`}
+              >
+                Profile
+              </span>
             </Link>
           </li>
           <li>
-            <Link to="/dashboard/users" className="flex items-center space-x-2 hover:text-gray-300 text-xl">
+            <Link to="/dashboard/users" onClick={toggleSidebar} className="flex items-center space-x-2 hover:text-gray-300 text-xl">
               <GiCardboardBox className="text-2xl" />
-              <span>Users</span>
+              <span
+                className={`transition-all duration-500 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0 hidden'}`}
+              >
+                Users
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/dashboard/products" onClick={toggleSidebar} className="flex items-center space-x-2 hover:text-gray-300 text-xl">
+              <MdProductionQuantityLimits className="text-2xl" />
+              <span
+                className={`transition-all duration-500 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0 hidden'}`}
+              >
+                Products
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/dashboard/create" onClick={toggleSidebar} className="flex items-center space-x-2 hover:text-gray-300 text-xl">
+              <MdCreateNewFolder className="text-2xl" />
+              <span
+                className={`transition-all duration-500 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0 hidden'}`}
+              >
+                Create
+              </span>
             </Link>
           </li>
         </ul>
 
         <button
           className="flex items-center space-x-2 hover:text-gray-300 text-xl text-white mt-auto pb-4"
-          onClick={handleLogout} 
+          onClick={handleLogout}
         >
           <MdLogout className="text-2xl" />
-          <span>Logout</span>
-         </button> 
+          <span
+            className={`transition-all duration-500 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0 hidden'}`}
+          >
+            Logout
+          </span>
+        </button>
       </div>
 
       {isOpen && (
