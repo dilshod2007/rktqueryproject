@@ -1,7 +1,6 @@
 nav {
     padding: 1rem;
     background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -12,11 +11,9 @@ nav {
     border: none;
     cursor: pointer;
   }
-  /* .DU{
-    background-color: rgba(255, 255, 255, 0.057);
-  } */
+ 
   .navbar{
-    background-color:rgba(255, 255, 255, 0);
+    background-color:rgba(255, 255, 255, 0.689);
   }
   
   button:hover {
@@ -30,28 +27,5 @@ nav {
     border-radius: 50%;
   }
 
-  .navbarcontainer {
-    position: relative;
-    z-index: 50;
-  }
-  
-  .navbar {
-    position: relative;
-    background-color: transparent;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .navbar.scrolled {
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .navbar.scrolled .text-gray-800 {
-    color: black;
-  }
-  
-  .navbar.scrolled a {
-    color: black;
-  }
-  
+
   

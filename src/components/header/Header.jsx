@@ -1,6 +1,6 @@
 import { FcLike } from "react-icons/fc";
 import { CgProfile } from "react-icons/cg";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useSearchProductMutation } from "../../redux/api/productsApi";
@@ -16,6 +16,7 @@ const Header = () => {
   const { pathname } = useLocation();
   const [searchProduct, { data }] = useSearchProductMutation();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false); 
   
   const likedProductsCount = useSelector((state) => state.like.likes.length);
 
@@ -30,15 +31,31 @@ const Header = () => {
     setSidebarVisible(!sidebarVisible);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   if (pathname.includes("auth")) return null;
   if (pathname.includes("dashboard/profile")) return null;
   if (pathname.includes("dashboard/users")) return null;
   if (pathname.includes("/dashboard")) return null;
 
   return (
-    <div className="navbarcontainer">
+    <div className="relative navbarcontainer">
       <div
-        className={` top-0 left-0  transition-transform transform ${
+        className={`fixed top-0 left-0 h-full bg-gray-900 text-white transition-transform transform ${
           sidebarVisible ? "translate-x-0" : "-translate-x-full"
         } z-40 w-72`}
         style={{ transition: "transform 0.3s ease", height: "100vh" }}
@@ -56,7 +73,7 @@ const Header = () => {
               onClick={toggleSidebar}
               className="hover:text-gray-400 text-lg font-medium"
             >
-              Home 
+              Home
             </Link>
           </li>
           {!token ? (
@@ -102,23 +119,45 @@ const Header = () => {
         ></div>
       )}
 
-      <nav className="    w-full flex items-center justify-between p-4      navbar">
+      <nav
+        className={`fixed top-0 left-0 w-full flex items-center justify-between p-4    z-20 navbar transition-all ${
+          isScrolled ? "bg-white text-gray-800 shadow-lg" : "bg-transparent text-white"
+        }`}
+      >
         <button
           onClick={toggleSidebar}
-          className={`text-gray-800 text-2xl hover:text-gray-600 ${
-            sidebarVisible ? "hidden" : ""
-          }`}
+          className={`text-2xl hover:text-gray-400 ${
+            isScrolled ? "text-gray-800" : "text-white"
+          } ${sidebarVisible ? "hidden" : ""}`}
         >
           <GiHamburgerMenu />
         </button>
 
         <Link to={"/"} className="flex items-center">
-          <div className="flex items-center justify-center  rounded-full ml-[201px]">
-          <div className=" DU ">
-            <span className="text-5xl font-bold ml-[20px]">D</span>
-            <span className="text-5xl font-bold ml-[-10px]">U</span>
-            <span className="text-5xl  font-bold ml-[-10px]">F</span>
-          </div>
+          <div className="flex items-center justify-center rounded-full ml-[200px]">
+            <div className="DU">
+              <span
+                className={`text-5xl  ml-[20px] ${
+                  isScrolled ? "text-gray-800" : "text-white"
+                }`}
+              >
+                D
+              </span>
+              <span
+                className={`text-5xl  ml-[-13px] ${
+                  isScrolled ? "text-gray-800" : "text-white"
+                }`}
+              >
+                U
+              </span>
+              <span
+                className={`text-5xl  ml-[-13px] ${
+                  isScrolled ? "text-gray-800" : "text-white"
+                }`}
+              >
+                F
+              </span>
+            </div>
           </div>
         </Link>
 
@@ -135,13 +174,15 @@ const Header = () => {
             onChange={(value) => setSearchValue(value)}
             onSearch={(text) => searchProduct(text)}
             placeholder="Search products..."
-            className="flex-grow border border-gray-300 rounded-lg"
+            className={`flex-grow border rounded-lg ${
+              isScrolled ? "border-gray-300 text-gray-800" : "border-white text-white"
+            }`}
           />
         </form>
 
         <div className="flex items-center space-x-6">
           <div className="relative">
-            <Link to="/liked" className="text-2xl">
+            <Link to="/liked" className={`text-2xl ${isScrolled ? "text-gray-800" : "text-white"}`}>
               <FcLike />
             </Link>
             {likedProductsCount > 0 && (
@@ -152,7 +193,11 @@ const Header = () => {
           </div>
 
           <Link to="/dashboard/profile">
-            <CgProfile className="text-3xl text-gray-800 hover:text-gray-600" />
+            <CgProfile
+              className={`text-3xl hover:text-gray-400 ${
+                isScrolled ? "text-gray-800" : "text-white"
+              }`}
+            />
           </Link>
         </div>
       </nav>

@@ -84,13 +84,13 @@ const Sidebar = () => {
           </li>
         </ul>
 
-        {/* <button
+        <button
           className="flex items-center space-x-2 hover:text-gray-300 text-xl text-white mt-auto pb-4"
           onClick={handleLogout} 
         >
           <MdLogout className="text-2xl" />
           <span>Logout</span>
-         </button>  */}
+         </button> 
       </div>
 
       {isOpen && (

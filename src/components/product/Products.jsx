@@ -38,19 +38,17 @@ const Products = () => {
 
             <div className='relative  bg-gray-800 text-white h-screen mb-16 '>
                 <div className='absolute inset-0 overflow-hidden  '>
-                    <video src={iphone} autoPlay muted loop className='w-full h-full object-cover'></video>
+                    <video src={iphone} autoPlay muted loop className='w-full h-full object-cover opacity-1.5'></video>
                     <div className='absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-90'></div>
                 </div>
-                <div className='relative flex flex-col items-center justify-center h-full text-center px-6'>
+                <div className='relative flex flex-col items-center justify-center h-full text-center px-6 '>
                     <h1 className='text-8xl font-extrabold mb-8 leading-tight'>
-                        iPhone 14 Pro
+                        iPhone 16 Pro
                     </h1>
                     <p className='text-4xl mb-10 leading-relaxed max-w-5xl'>
                         Experience the future of smartphones. Designed with perfection.
                     </p>
-                    <Button className='mt-6 px-12 py-6 text-2xl font-bold' type='primary' size='large'>
-                        Shop Now
-                    </Button>
+                   
                 </div>
                 <marquee className='bg-gray-900 text-white h-[100px] flex items-center p-4' direction="left" scrollamount="10">
                     <div className='flex items-center space-x-8 gap-[100px]'>
