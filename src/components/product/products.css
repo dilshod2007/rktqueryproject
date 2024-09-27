@@ -16,4 +16,12 @@
 title{
   color:white;
 }
-  
+  /* Скрываем скроллбар */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* для Chrome, Safari и Opera */
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* для IE и Edge */
+  scrollbar-width: none;  /* для Firefox */
+}

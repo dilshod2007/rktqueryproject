@@ -4,37 +4,43 @@ import { Container } from '../../utils';
 import { Link } from 'react-router-dom';
 import { Carousel, Rate } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { HeartOutlined, HeartFilled, SoundOutlined, SoundFilled } from '@ant-design/icons'; 
+import { HeartOutlined, HeartFilled, SoundOutlined, SoundFilled } from '@ant-design/icons';
 import { addLike, removeLike } from '../../redux/slices/likeSlice';
 import { useGetLikedProductsMutation, useUnLikeProductMutation } from "../../redux/api/likedApi";
-import { toast, ToastContainer } from 'react-toastify'; 
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import iphone from "../../imgs/16.mp4";
 import { useState, useRef } from 'react';
+import ios from "../../imgs/ios.webp"
+import ios11 from "../../imgs/ios11.jpg"
+import ios12 from "../../imgs/ios12.jpeg"
+import ios13 from "../../imgs/ios13.webp"
+import ios14 from "../../imgs/ios14.jpg"
+import ios16 from "../../imgs/ios16.webp"
 
 const { Meta } = Card;
 
 const Products = () => {
     const { data, isLoading } = useGetProductsQuery();
     const dispatch = useDispatch();
-    const likedProducts = useSelector((state) => state.like.likes); 
-    const [getLikedProducts] = useGetLikedProductsMutation(); 
-    const [unLikeProduct] = useUnLikeProductMutation(); 
+    const likedProducts = useSelector((state) => state.like.likes);
+    const [getLikedProducts] = useGetLikedProductsMutation();
+    const [unLikeProduct] = useUnLikeProductMutation();
 
-    const [isMuted, setIsMuted] = useState(true); 
+    const [isMuted, setIsMuted] = useState(true);
     const videoRef = useRef(null);
 
-    const [loadingProductId, setLoadingProductId] = useState(null);  
+    const [loadingProductId, setLoadingProductId] = useState(null);
 
     const handleLikeToggle = async (productId) => {
         if (likedProducts.includes(productId)) {
             await unLikeProduct(productId);
             dispatch(removeLike(productId));
-            toast.info("Product unliked!");  
+            toast.info("Product unliked!");
         } else {
             await getLikedProducts(productId);
             dispatch(addLike(productId));
-            toast.success("Product liked!"); 
+            toast.success("Product liked!");
         }
     };
 
@@ -51,20 +57,20 @@ const Products = () => {
         setTimeout(() => {
             setLoadingProductId(null);
             window.location.href = `/products/${productId}`;
-        }, 2000);  
+        }, 2000);
     };
 
     return (
         <div>
-            <ToastContainer /> 
+            <ToastContainer />
 
             <div className='relative bg-gray-800 text-white h-screen mb-16'>
                 <div className='absolute inset-0 overflow-hidden'>
-                    <video 
-                        src={iphone}  
-                        autoPlay 
-                        muted={isMuted} 
-                        ref={videoRef}  
+                    <video
+                        src={iphone}
+                        autoPlay
+                        muted={isMuted}
+                        ref={videoRef}
                         className='w-full h-full object-cover opacity-1.5'
                     ></video>
                     <div className='absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-90'></div>
@@ -76,8 +82,8 @@ const Products = () => {
                     <p className='text-4xl mb-10 leading-relaxed max-w-5xl'>
                         Experience the future of smartphones. Designed with perfection.
                     </p>
-                   
-                    <div 
+
+                    <div
                         className='absolute bottom-10 right-10 p-3 bg-gray-700 rounded-full cursor-pointer hover:bg-gray-600 transition'
                         onClick={handleSoundToggle}
                     >
@@ -88,16 +94,16 @@ const Products = () => {
                     <div className='flex items-center space-x-8 gap-[100px]'>
                         {data && data.payload.slice(0, 5).map((product, index) => (
                             <div key={index} className='flex items-center space-x-4'>
-                                <img 
-                                    src={product.product_images[0]} 
-                                    alt={product.product_name} 
-                                    className='h-12 w-auto object-cover' 
+                                <img
+                                    src={product.product_images[0]}
+                                    alt={product.product_name}
+                                    className='h-12 w-auto object-cover'
                                 />
                                 <span>🔥 {product.product_name} - ${product.sale_price} 🔥</span>
-                                <img 
-                                    src={product.product_images[1]} 
-                                    alt={product.product_name} 
-                                    className='h-12 w-auto object-cover' 
+                                <img
+                                    src={product.product_images[1]}
+                                    alt={product.product_name}
+                                    className='h-12 w-auto object-cover'
                                 />
                                 <span>🚚 Free Shipping on Orders Over $50! 🚚</span>
                             </div>
@@ -109,7 +115,7 @@ const Products = () => {
 
             <Container>
                 <h2 className='text-3xl font-bold text-center mb-8 mt-[150px]'>Our Products</h2>
-                {isLoading ? ( 
+                {isLoading ? (
                     <div className='flex justify-center items-center h-96'>
                         <Spin size='large' />
                     </div>
@@ -117,7 +123,7 @@ const Products = () => {
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 w-[1350px] mx-auto ml-[-80px] h-[1200px]'>
                         {
                             data && data.payload &&
-                            data.payload.map(product => 
+                            data.payload.map(product =>
                                 <Card
                                     key={product._id}
                                     hoverable
@@ -131,12 +137,12 @@ const Products = () => {
                                                     </div>
                                                 ))}
                                             </Carousel>
-                                            <div className='absolute top-2 right-2 z-10 text-white text-2xl cursor-pointer'> 
+                                            <div className='absolute top-2 right-2 z-10 text-white text-2xl cursor-pointer'>
                                                 <Button
                                                     className='text-white ml-[400px] bg-red-500 rounded'
-                                                    type="text" 
-                                                    icon={likedProducts.includes(product._id) ? <HeartFilled className='text-red-500' /> : <HeartOutlined className='text-white ' />} 
-                                                    onClick={() => handleLikeToggle(product._id)} 
+                                                    type="text"
+                                                    icon={likedProducts.includes(product._id) ? <HeartFilled className='text-red-500' /> : <HeartOutlined className='text-white ' />}
+                                                    onClick={() => handleLikeToggle(product._id)}
                                                 />
                                             </div>
                                         </>
@@ -155,19 +161,19 @@ const Products = () => {
                                                         <Rate className='border-1 border-white' disabled defaultValue={2} />
                                                         <span className='ml-2'>{product.reviews_count} reviews</span>
                                                     </div>
-                                                    {product.discount && 
+                                                    {product.discount &&
                                                         <div className='mt-2 text-red-500'>
                                                             <strong>Discount: {product.discount}% OFF</strong>
                                                         </div>
                                                     }
                                                 </div>
                                             </div>
-                                        } 
+                                        }
                                     />
                                     <Button
                                         className='w-full mt-4'
                                         type='primary'
-                                        loading={loadingProductId === product._id} 
+                                        loading={loadingProductId === product._id}
                                         onClick={() => handleViewDetailsClick(product._id)}
                                     >
                                         {loadingProductId === product._id ? 'Loading...' : 'View Details'}
@@ -179,10 +185,25 @@ const Products = () => {
                 )}
             </Container>
 
+          
+ {/* <div className='h-auto mx-auto '>
+            <div className='flex mt-[300px] ml-[100px] gap-4 mx-auto h-[700px] w-full  '>
+                <img className="w-[500px] h-[500px] object-cover rounded-lg" src={ios} alt="ios" />
+                <img className="w-[500px] h-[500px] object-cover rounded-lg" src={ios11} alt="ios11" />
+                <img className="w-[600px] h-[600px] object-cover rounded-lg" src={ios12} alt="ios12" />
+                <img className="w-[500px] h-[500px] object-cover rounded-lg" src={ios13} alt="ios13" />
+                <img className="w-[500px] h-[500px] object-cover rounded-lg" src={ios14} alt="ios14" />
+                <img className="w-[500px] h-[500px] object-cover rounded-lg" src={ios16} alt="ios16" />
+            </div>
+            <div className='mt-[200px]'></div>
+        </div> */}
+
+
+
             <div className='bg-gray-800 text-white py-6 text-center mt-[200px]'>
                 <p>&copy; 2024 Your Company. All rights reserved.</p>
                 <p>
-                    <Link to='/contact' className='text-blue-400 hover:underline'>Contact Us</Link> | 
+                    <Link to='/contact' className='text-blue-400 hover:underline'>Contact Us</Link> |
                     <Link to='/privacy' className='text-blue-400 hover:underline'> Privacy Policy</Link>
                 </p>
             </div>

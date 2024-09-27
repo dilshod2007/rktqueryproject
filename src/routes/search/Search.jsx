@@ -19,7 +19,7 @@ const Search = () => {
     console.log(data)
 
   return (
-    <div className='my-10'>
+    <div className='my-10 ml-[100px] mt-[100px]'>
        <Container>
         <div className='grid grid-cols-4 gap-4'>
         {

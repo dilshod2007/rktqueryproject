@@ -2,7 +2,7 @@ import React from 'react'
 
 const Create = () => {
   return (
-    <div className='mt-[100px]'>Create xali qilinmagan :)</div>
+    <div className="ml-[100px] mt-[100px]">Create xali qilinmagan :)</div>
   )
 }
 
